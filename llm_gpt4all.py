@@ -78,7 +78,7 @@ class Gpt4AllModel(llm.Model):
 
     def __str__(self):
         installed = " (installed)" if self.is_installed() else ""
-        return "gpt4all: {} - {}, {} on disk, needs {}GB RAM{}".format(
+        return "gpt4all: {} - {}, {} download, needs {}GB RAM{}".format(
             self.model_id,
             self._details["name"],
             human_readable_size(self.filesize_bytes()),
