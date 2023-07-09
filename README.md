@@ -40,6 +40,8 @@ gpt4all: ggml-nous-gpt4-vicuna-13b - Nous Vicuna, 7.58GB download, needs 16GB RA
 gpt4all: ggml-stable-vicuna-13B - Stable Vicuna, 7.58GB download, needs 16GB RAM
 gpt4all: wizardLM-13B-Uncensored - Wizard Uncensored, 7.58GB download, needs 16GB RAM
 ```
+Further details on these models can be found [in this Observable notebook](https://observablehq.com/@simonw/gpt4all-models).
+
 ## Usage
 
 You can execute a model using the name displayed in the `llm models list` output. The model file will be downloaded the first time you attempt to run it.
