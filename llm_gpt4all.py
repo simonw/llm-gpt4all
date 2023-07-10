@@ -54,14 +54,13 @@ class Gpt4AllModel(llm.Model):
         self._details = details
         self.model_id = details["filename"].split(".")[0]
 
-    class Response(llm.Response):
-        def iter_prompt(self, prompt):
-            with SuppressOutput():
-                gpt_model = GPT4All(self.model.filename())
-                output = gpt_model.generate(
-                    prompt.prompt, max_tokens=400, streaming=True
-                )
-                yield from output
+    def execute(self, prompt, stream, response):
+        with SuppressOutput():
+            gpt_model = GPT4All(self.filename())
+            output = gpt_model.generate(
+                prompt.prompt, max_tokens=400, streaming=True
+            )
+            yield from output
 
     def filename(self):
         return self._details["filename"]
