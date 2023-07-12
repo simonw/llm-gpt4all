@@ -7,6 +7,7 @@ import llm
 import os
 import sys
 import time
+from typing import List, Optional, Tuple
 
 
 class GPT4All(_GPT4All):
@@ -52,10 +53,62 @@ class Gpt4AllModel(llm.Model):
         self._details = details
         self.model_id = details["filename"].split(".")[0]
 
-    def execute(self, prompt, stream, response):
+    def prompt_template(self):
+        return (
+            self._details.get("promptTemplate") or "### Human: \n%1\n### Assistant:\n"
+        )
+
+    def system_prompt(self):
+        return self._details.get("systemPrompt")
+
+    def build_prompt_blocks_and_system(
+        self, prompt: llm.Prompt, conversation: Optional[llm.Conversation]
+    ) -> Tuple[List[str], str]:
+        blocks = []
+
+        # Simplified handling of system prompts: use the one from prompt.system, or the
+        # one from the first message in the conversation, or the default for the model.
+        # Ignore the case where the system prompt changed mid-conversation.
+        system_prompt = None
+        if prompt.system:
+            system_prompt = prompt.system
+
+        if conversation is not None:
+            for response in conversation.responses:
+                if response.prompt.system:
+                    system_prompt = response.prompt.system
+                    break
+
+        if system_prompt is None:
+            system_prompt = self.system_prompt()
+
+        template = self.prompt_template()
+        # Special case to add <|im_end|> if it looks necessary
+        template_end = ""
+        if "<|im_start|>" in template and template.count(
+            "<|im_start|>"
+        ) - 1 == template.count("<|im_end|>"):
+            template_end = "<|im_end|>"
+
+        if conversation is not None:
+            for prev_response in conversation.responses:
+                blocks.append(template.replace("%1", prev_response.prompt.prompt))
+                blocks.append(prev_response.text() + template_end)
+
+        # Add the user's prompt
+        blocks.append(template.replace("%1", prompt.prompt))
+
+        return blocks, system_prompt
+
+    def execute(self, prompt, stream, response, conversation):
         with SuppressOutput():
+            blocks, system = self.build_prompt_blocks_and_system(prompt, conversation)
+            text_prompt = "".join(blocks)
+            if system:
+                text_prompt = f"{system}\n{text_prompt}"
+            response.response_json = {"full_prompt": text_prompt}
             gpt_model = GPT4All(self.filename())
-            output = gpt_model.generate(prompt.prompt, max_tokens=400, streaming=True)
+            output = gpt_model.generate(text_prompt, max_tokens=400, streaming=True)
             yield from output
 
     def filename(self):
