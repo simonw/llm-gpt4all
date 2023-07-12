@@ -22,11 +22,9 @@ class GPT4All(_GPT4All):
 
 
 def get_gpt4all_models():
-    from llm.cli import user_dir
-
     return fetch_cached_json(
         url="https://gpt4all.io/models/models.json",
-        path=user_dir() / "gpt4all_models.json",
+        path=llm.user_dir() / "gpt4all_models.json",
         cache_timeout=3600,
     )
 
@@ -57,9 +55,7 @@ class Gpt4AllModel(llm.Model):
     def execute(self, prompt, stream, response):
         with SuppressOutput():
             gpt_model = GPT4All(self.filename())
-            output = gpt_model.generate(
-                prompt.prompt, max_tokens=400, streaming=True
-            )
+            output = gpt_model.generate(prompt.prompt, max_tokens=400, streaming=True)
             yield from output
 
     def filename(self):
