@@ -2,6 +2,7 @@ from gpt4all import GPT4All as _GPT4All
 from pathlib import Path
 from typing import Optional
 import httpx
+import urllib3
 import json
 import llm
 import os
@@ -166,7 +167,7 @@ def fetch_cached_json(url, path, cache_timeout):
             json.dump(response.json(), file)
 
         return response.json()
-    except httpx.HTTPError:
+    except (httpx.HTTPError, urllib3.exceptions.NameResolutionError):
         # If there's an existing file, load it
         if path.is_file():
             with open(path, "r") as file:
