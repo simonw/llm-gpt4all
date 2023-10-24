@@ -30,8 +30,8 @@ setup(
     modules=["llm_gpt4all"],
     entry_points={"llm": ["gpt4all = llm_gpt4all"]},
     install_requires=[
-        "llm>=0.5",
-        "gpt4all",
+        "llm>=0.11",
+        "gpt4all>=2.0.1",
         "httpx",
     ],
     extras_require={"test": ["pytest"]},

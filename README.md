@@ -20,23 +20,19 @@ llm models list
 ```
 The output will include something like this:
 ```
-gpt4all: orca-mini-3b - Orca (Small), 1.80GB download, needs 4GB RAM (installed)
-gpt4all: ggml-gpt4all-j-v1 - Groovy, 3.53GB download, needs 8GB RAM (installed)
-gpt4all: nous-hermes-13b - Hermes, 7.58GB download, needs 16GB RAM (installed)
-gpt4all: orca-mini-7b - Orca, 3.53GB download, needs 8GB RAM
-gpt4all: ggml-model-gpt4all-falcon-q4_0 - GPT4All Falcon, 3.78GB download, needs 8GB RAM
-gpt4all: ggml-vicuna-7b-1 - Vicuna, 3.92GB download, needs 8GB RAM
-gpt4all: ggml-wizardLM-7B - Wizard, 3.92GB download, needs 8GB RAM
-gpt4all: ggml-mpt-7b-base - MPT Base, 4.52GB download, needs 8GB RAM
-gpt4all: ggml-mpt-7b-instruct - MPT Instruct, 4.52GB download, needs 8GB RAM
-gpt4all: ggml-mpt-7b-chat - MPT Chat, 4.52GB download, needs 8GB RAM
-gpt4all: ggml-replit-code-v1-3b - Replit, 4.84GB download, needs 4GB RAM
-gpt4all: orca-mini-13b - Orca (Large), 6.82GB download, needs 16GB RAM
-gpt4all: GPT4All-13B-snoozy - Snoozy, 7.58GB download, needs 16GB RAM
-gpt4all: ggml-vicuna-13b-1 - Vicuna (large), 7.58GB download, needs 16GB RAM
-gpt4all: ggml-nous-gpt4-vicuna-13b - Nous Vicuna, 7.58GB download, needs 16GB RAM
-gpt4all: ggml-stable-vicuna-13B - Stable Vicuna, 7.58GB download, needs 16GB RAM
-gpt4all: wizardLM-13B-Uncensored - Wizard Uncensored, 7.58GB download, needs 16GB RAM
+gpt4all: orca-mini-3b-gguf2-q4_0 - Mini Orca (Small), 1.84GB download, needs 4GB RAM (installed)
+gpt4all: nous-hermes-llama2-13b - Hermes, 6.86GB download, needs 16GB RAM (installed)
+gpt4all: all-MiniLM-L6-v2-f16 - SBert, 43.76MB download, needs 1GB RAM
+gpt4all: replit-code-v1_5-3b-q4_0 - Replit, 1.74GB download, needs 4GB RAM
+gpt4all: mpt-7b-chat-merges-q4_0 - MPT Chat, 3.54GB download, needs 8GB RAM
+gpt4all: rift-coder-v0-7b-q4_0 - Rift coder, 3.56GB download, needs 8GB RAM
+gpt4all: em_german_mistral_v01 - EM German Mistral, 3.83GB download, needs 8GB RAM
+gpt4all: mistral-7b-instruct-v0 - Mistral Instruct, 3.83GB download, needs 8GB RAM
+gpt4all: mistral-7b-openorca - Mistral OpenOrca, 3.83GB download, needs 8GB RAM
+gpt4all: gpt4all-falcon-q4_0 - GPT4All Falcon, 3.92GB download, needs 8GB RAM
+gpt4all: gpt4all-13b-snoozy-q4_0 - Snoozy, 6.86GB download, needs 16GB RAM
+gpt4all: wizardlm-13b-v1 - Wizard v1.2, 6.86GB download, needs 16GB RAM
+gpt4all: starcoder-q4_0 - Starcoder, 8.37GB download, needs 4GB RAM
 ```
 Further details on these models can be found [in this Observable notebook](https://observablehq.com/@simonw/gpt4all-models).
 
@@ -45,13 +41,32 @@ Further details on these models can be found [in this Observable notebook](https
 You can execute a model using the name displayed in the `llm models list` output. The model file will be downloaded the first time you attempt to run it.
 
 ```bash
-llm -m orca-mini-7b '3 names for a pet cow'
+llm -m orca-mini-3b-gguf2-q4_0 '3 names for a pet cow'
 ```
 The first time you run this you will see a progress bar:
 ```
  31%|█████████▋                        | 1.16G/3.79G [00:26<01:02, 42.0MiB/s]
 ```
 On subsequent uses the model output will be displayed immediately.
+
+To chat with a model, avoiding the need to load it into memory for every message, use `llm chat`:
+
+```bash
+llm chat -m orca-mini-3b-gguf2-q4_0
+```
+```
+Chatting with orca-mini-3b-gguf2-q4_0
+Type 'exit' or 'quit' to exit
+Type '!multi' to enter multiple lines, then '!end' to finish
+> hi
+ Hello! How can I assist you today?
+> three jokes about a pelican and a chicken who are friends
+ Sure, here are three jokes about a pelican and a chicken who are friends:
+
+1. Why did the pelican cross the road? To get to the other side where the chicken was waiting for him!
+2. What do you call a group of chickens playing basketball? A flock of feathers!
+3. Why did the chicken invite the pelican over for dinner? Because it had nothing else to eat and needed some extra protein in its diet!
+```
 
 ## Development
 
