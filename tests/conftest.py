@@ -49,6 +49,6 @@ def user_path(tmpdir):
 def env_setup(monkeypatch, user_path):
     monkeypatch.setenv("LLM_USER_PATH", str(user_path))
     # Write out the models.json file
-    (llm.user_dir() / "gpt4all_models.json").write_text(
+    (llm.user_dir() / "gpt4all_models2.json").write_text(
         json.dumps(DUMMY_MODELS), "utf-8"
     )
