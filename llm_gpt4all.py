@@ -1,5 +1,6 @@
 from gpt4all import GPT4All as _GPT4All
 from pathlib import Path
+import requests.exceptions
 from typing import Optional
 import httpx
 import json
@@ -19,7 +20,11 @@ class GPT4All(_GPT4All):
         allow_download: bool = True,
         verbose: bool = False,
     ) -> str:
-        return _GPT4All.retrieve_model(model_name, model_path, allow_download, verbose)
+        try:
+            return _GPT4All.retrieve_model(model_name, model_path, allow_download, verbose)
+        except requests.exceptions.ConnectionError:
+            return _GPT4All.retrieve_model(model_name, model_path, allow_download=False, verbose=verbose)
+
 
 
 def get_gpt4all_models():
