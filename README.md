@@ -51,7 +51,7 @@ The first time you run this you will see a progress bar for the model file downl
 ```
 On subsequent uses the model output will be displayed immediately.
 
-Note that the models will be downloaded to `~/.cache/gpt4all` and not the default `llm` configuration directory.
+Note that the models will be downloaded to `~/.cache/gpt4all`.
 
 ### Chatting
 
