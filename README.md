@@ -53,6 +53,41 @@ On subsequent uses the model output will be displayed immediately.
 
 Note that the models will be downloaded to `~/.cache/gpt4all`.
 
+### Model options
+
+Run `llm models --options` for a list of available model options, which should include:
+
+```
+gpt4all: mistral-7b-instruct-v0 - Mistral Instruct, 3.83GB download, needs 8GB RAM (installed)
+  max_tokens: int
+    The maximum number of tokens to generate.
+  temp: float
+    The model temperature. Larger values increase creativity but decrease
+    factuality.
+  top_k: int
+    Randomly sample from the top_k most likely tokens at each generation
+    step. Set this to 1 for greedy decoding.
+  top_p: float
+    Randomly sample at each generation step from the top most likely
+    tokens whose probabilities add up to top_p.
+  repeat_penalty: float
+    Penalize the model for repetition. Higher values result in less
+    repetition.
+  repeat_last_n: int
+    How far in the models generation history to apply the repeat penalty.
+  n_batch: int
+    Number of prompt tokens processed in parallel. Larger values decrease
+    latency but increase resource requirements.
+```
+Use them like this:
+
+```bash
+llm -m mistral-7b-instruct-v0 -o max_tokens 2 'hi'
+```
+```
+Hello!
+```
+
 ### Chatting
 
 To chat with a model, avoiding the need to load it into memory for every message, use `llm chat`:
@@ -81,15 +116,16 @@ To remove a downloaded model, delete the `.gguf` file from `~/.cache/gpt4all`.
 ## Development
 
 To set up this plugin locally, first checkout the code. Then create a new virtual environment:
-
-    cd llm-gpt4all
-    python3 -m venv venv
-    source venv/bin/activate
-
+```bash
+cd llm-gpt4all
+python3 -m venv venv
+source venv/bin/activate
+```
 Now install the dependencies and test dependencies:
-
-    pip install -e '.[test]'
-
+```bash
+pip install -e '.[test]'
+```
 To run the tests:
-
-    pytest
+```bash
+pytest
+```

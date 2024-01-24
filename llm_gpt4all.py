@@ -11,9 +11,19 @@ import time
 from typing import List, Optional, Tuple
 
 
+try:
+    from pydantic import Field, field_validator  # type: ignore
+except ImportError:
+    from pydantic.class_validators import (
+        validator as field_validator,
+    )  # type: ignore [no-redef]
+    from pydantic.fields import Field
+
+
 # Hardcode default model_path since the library doesn't expose it programmatically
 # https://docs.gpt4all.io/gpt4all_python.html#api-documentation
 GPT4ALL_MODEL_DIRECTORY = Path.home() / ".cache" / "gpt4all"
+
 
 class GPT4All(_GPT4All):
     # Switch verbose default to False
@@ -57,6 +67,29 @@ def register_models(register):
 
 class Gpt4AllModel(llm.Model):
     can_stream = True
+
+    class Options(llm.Options):
+        max_tokens: int = Field(
+            description="The maximum number of tokens to generate.", default=200
+        )
+        temp: float = Field(
+            description="The model temperature. Larger values increase creativity but decrease factuality.", default=0.7
+        )
+        top_k: int = Field(
+            description="Randomly sample from the top_k most likely tokens at each generation step. Set this to 1 for greedy decoding.", default=40
+        )
+        top_p: float = Field(
+            description="Randomly sample at each generation step from the top most likely tokens whose probabilities add up to top_p.", default=0.4
+        )
+        repeat_penalty: float = Field(
+            description="Penalize the model for repetition. Higher values result in less repetition.", default=1.18
+        )
+        repeat_last_n: int = Field(
+            description="How far in the models generation history to apply the repeat penalty.", default=64
+        )
+        n_batch: int = Field(
+            description="Number of prompt tokens processed in parallel. Larger values decrease latency but increase resource requirements.", default=8
+        )
 
     def __init__(self, details):
         self._details = details
@@ -117,13 +150,22 @@ class Gpt4AllModel(llm.Model):
                 text_prompt = f"{system}\n{text_prompt}"
             response.response_json = {"full_prompt": text_prompt}
 
-            # We assume file existing is enough to enable download, does not check if file is complete
+            # Assume file existing is enough to enable download, don't check if file is complete
             model_name = self.filename()
             model_exists_locally = Path(GPT4ALL_MODEL_DIRECTORY / model_name).exists()
             allow_download = not model_exists_locally
             gpt_model = GPT4All(model_name, allow_download=allow_download)
-
-            output = gpt_model.generate(text_prompt, max_tokens=400, streaming=True)
+            output = gpt_model.generate(
+                text_prompt,
+                streaming=True,
+                max_tokens = prompt.options.max_tokens or 400,
+                temp = prompt.options.temp,
+                top_k = prompt.options.top_k,
+                top_p = prompt.options.top_p,
+                repeat_penalty = prompt.options.repeat_penalty,
+                repeat_last_n = prompt.options.repeat_last_n,
+                n_batch = prompt.options.n_batch,
+            )
             yield from output
 
     def filename(self):
