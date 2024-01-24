@@ -1,8 +1,8 @@
 from gpt4all import GPT4All as _GPT4All
 from pathlib import Path
+import requests.exceptions
 from typing import Optional
 import httpx
-import urllib3
 import json
 import llm
 import os
@@ -20,6 +20,11 @@ except ImportError:
     from pydantic.fields import Field
 
 
+# Hardcode default model_path since the library doesn't expose it programmatically
+# https://docs.gpt4all.io/gpt4all_python.html#api-documentation
+GPT4ALL_MODEL_DIRECTORY = Path.home() / ".cache" / "gpt4all"
+
+
 class GPT4All(_GPT4All):
     # Switch verbose default to False
     @staticmethod
@@ -29,7 +34,11 @@ class GPT4All(_GPT4All):
         allow_download: bool = True,
         verbose: bool = False,
     ) -> str:
-        return _GPT4All.retrieve_model(model_name, model_path, allow_download, verbose)
+        try:
+            return _GPT4All.retrieve_model(model_name, model_path, allow_download, verbose)
+        except requests.exceptions.ConnectionError:
+            return _GPT4All.retrieve_model(model_name, model_path, allow_download=False, verbose=verbose)
+
 
 
 def get_gpt4all_models():
@@ -140,7 +149,12 @@ class Gpt4AllModel(llm.Model):
             if system:
                 text_prompt = f"{system}\n{text_prompt}"
             response.response_json = {"full_prompt": text_prompt}
-            gpt_model = GPT4All(self.filename())
+
+            # Assume file existing is enough to enable download, don't check if file is complete
+            model_name = self.filename()
+            model_exists_locally = Path(GPT4ALL_MODEL_DIRECTORY / model_name).exists()
+            allow_download = not model_exists_locally
+            gpt_model = GPT4All(model_name, allow_download=allow_download)
             output = gpt_model.generate(
                 text_prompt,
                 streaming=True,
@@ -209,7 +223,7 @@ def fetch_cached_json(url, path, cache_timeout):
             json.dump(response.json(), file)
 
         return response.json()
-    except (httpx.HTTPError, urllib3.exceptions.NameResolutionError):
+    except httpx.HTTPError:
         # If there's an existing file, load it
         if path.is_file():
             with open(path, "r") as file:

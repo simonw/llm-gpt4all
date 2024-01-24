@@ -38,16 +38,22 @@ Further details on these models can be found [in this Observable notebook](https
 
 ## Usage
 
+### Model Installation and Prompting
+
 You can execute a model using the name displayed in the `llm models list` output. The model file will be downloaded the first time you attempt to run it.
 
 ```bash
 llm -m orca-mini-3b-gguf2-q4_0 '3 names for a pet cow'
 ```
-The first time you run this you will see a progress bar:
+The first time you run this you will see a progress bar for the model file download:
 ```
  31%|█████████▋                        | 1.16G/3.79G [00:26<01:02, 42.0MiB/s]
 ```
 On subsequent uses the model output will be displayed immediately.
+
+Note that the models will be downloaded to `~/.cache/gpt4all`.
+
+### Chatting
 
 To chat with a model, avoiding the need to load it into memory for every message, use `llm chat`:
 
@@ -67,6 +73,10 @@ Type '!multi' to enter multiple lines, then '!end' to finish
 2. What do you call a group of chickens playing basketball? A flock of feathers!
 3. Why did the chicken invite the pelican over for dinner? Because it had nothing else to eat and needed some extra protein in its diet!
 ```
+
+### Removing Models
+
+To remove a downloaded model, delete the `.gguf` file from `~/.cache/gpt4all`.
 
 ## Development
 
