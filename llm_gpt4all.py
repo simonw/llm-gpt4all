@@ -180,7 +180,7 @@ class Gpt4AllModel(llm.Model):
                 self._details["filename"], allow_download=False, verbose=False
             )
             return True
-        except ValueError:
+        except (FileNotFoundError, ValueError):
             return False
 
     def __str__(self):
