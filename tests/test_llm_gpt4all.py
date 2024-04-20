@@ -18,10 +18,8 @@ def test_llm_models():
     result = runner.invoke(cli, ["models", "list"])
     assert result.exit_code == 0, result.output
     for fragment in (
-        "gpt4all: ggml-gpt4all-j-v1 - Groovy, 3.53GB download, needs 8GB RAM",
-        "gpt4all: orca-mini-7b - Orca, 3.53GB download, needs 8GB RAM",
-        "gpt4all: ggml-model-gpt4all-falcon-q4_0 - GPT4All Falcon, 3.78GB download, needs 8GB RAM",
-        "gpt4all: ggml-mpt-7b-chat - MPT Chat, 4.52GB download, needs 8GB RAM",
+        "gpt4all: Meta-Llama-3-8B-Instruct - Llama 3 Instruct, 4.34GB download, needs 8GB RAM",
+        "gpt4all: mistral-7b-instruct-v0 - Mistral Instruct, 3.83GB download, needs 8GB RAM",
     ):
         assert fragment in result.output
 
@@ -30,39 +28,23 @@ def test_llm_models():
     "model_id,expected_blocks",
     (
         (
-            "ggml-gpt4all-j-v1",
-            # This has no promptTemplate, so default display
+            "Meta-Llama-3-8B-Instruct",
             [
-                "### Human: \ninput 1\n### Assistant:\n",
+                "<|start_header_id|>user<|end_header_id|>\n\ninput 1<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n%2<|eot_id|>",
                 "response 1",
-                "### Human: \ninput 2\n### Assistant:\n",
+                "<|start_header_id|>user<|end_header_id|>\n\ninput 2<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n%2<|eot_id|>",
             ],
         ),
         (
-            "orca-mini-7b",
-            # This has no promptTemplate, so default display
-            [
-                "### User:\ninput 1\n### Response:\n",
-                "response 1",
-                "### User:\ninput 2\n### Response:\n",
-            ],
+            "mistral-7b-instruct-v0",
+            ["[INST] input 1 [/INST]", "response 1", "[INST] input 2 [/INST]"],
         ),
         (
-            "ggml-mpt-7b-chat",
-            # This has no promptTemplate, so default display
+            "orca-mini-3b-gguf2-q4_0",
             [
-                "<|im_start|>user\ninput 1<|im_end|><|im_start|>assistant\n",
-                "response 1<|im_end|>",
-                "<|im_start|>user\ninput 2<|im_end|><|im_start|>assistant\n",
-            ],
-        ),
-        (
-            "ggml-model-gpt4all-falcon-q4_0",
-            # This has no promptTemplate, so default display
-            [
-                "### Instruction:\ninput 1\n### Response:\n",
+                "### User:\ninput 1\n\n### Response:\n",
                 "response 1",
-                "### Instruction:\ninput 2\n### Response:\n",
+                "### User:\ninput 2\n\n### Response:\n",
             ],
         ),
     ),
