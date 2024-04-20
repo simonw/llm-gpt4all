@@ -43,8 +43,8 @@ class GPT4All(_GPT4All):
 
 def get_gpt4all_models():
     return fetch_cached_json(
-        url="https://gpt4all.io/models/models2.json",
-        path=llm.user_dir() / "gpt4all_models2.json",
+        url="https://gpt4all.io/models/models3.json",
+        path=llm.user_dir() / "gpt4all_models3.json",
         cache_timeout=3600,
     )
 
