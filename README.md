@@ -20,19 +20,28 @@ llm models list
 ```
 The output will include something like this:
 ```
+gpt4all: all-MiniLM-L6-v2-f16 - SBert, 43.76MB download, needs 1GB RAM (installed)
 gpt4all: orca-mini-3b-gguf2-q4_0 - Mini Orca (Small), 1.84GB download, needs 4GB RAM (installed)
-gpt4all: nous-hermes-llama2-13b - Hermes, 6.86GB download, needs 16GB RAM (installed)
-gpt4all: all-MiniLM-L6-v2-f16 - SBert, 43.76MB download, needs 1GB RAM
-gpt4all: replit-code-v1_5-3b-q4_0 - Replit, 1.74GB download, needs 4GB RAM
-gpt4all: mpt-7b-chat-merges-q4_0 - MPT Chat, 3.54GB download, needs 8GB RAM
+gpt4all: mistral-7b-instruct-v0 - Mistral Instruct, 3.83GB download, needs 8GB RAM (installed)
+gpt4all: mistral-7b-openorca - Mistral OpenOrca, 3.83GB download, needs 8GB RAM (installed)
+gpt4all: Meta-Llama-3-8B-Instruct - Llama 3 Instruct, 4.34GB download, needs 8GB RAM (installed) (aliases: l3)
+gpt4all: all-MiniLM-L6-v2 - SBert, 43.82MB download, needs 1GB RAM
+gpt4all: nomic-embed-text-v1 - Nomic Embed Text v1, 261.58MB download, needs 1GB RAM
+gpt4all: nomic-embed-text-v1 - Nomic Embed Text v1.5, 261.58MB download, needs 1GB RAM
+gpt4all: replit-code-v1_5-3b-newbpe-q4_0 - Replit, 1.82GB download, needs 4GB RAM
+gpt4all: mpt-7b-chat - MPT Chat, 3.54GB download, needs 8GB RAM
+gpt4all: orca-2-7b - Orca 2 (Medium), 3.56GB download, needs 8GB RAM
 gpt4all: rift-coder-v0-7b-q4_0 - Rift coder, 3.56GB download, needs 8GB RAM
+gpt4all: mpt-7b-chat-newbpe-q4_0 - MPT Chat, 3.64GB download, needs 8GB RAM
 gpt4all: em_german_mistral_v01 - EM German Mistral, 3.83GB download, needs 8GB RAM
-gpt4all: mistral-7b-instruct-v0 - Mistral Instruct, 3.83GB download, needs 8GB RAM
-gpt4all: mistral-7b-openorca - Mistral OpenOrca, 3.83GB download, needs 8GB RAM
-gpt4all: gpt4all-falcon-q4_0 - GPT4All Falcon, 3.92GB download, needs 8GB RAM
+gpt4all: ghost-7b-v0 - Ghost 7B v0.9.1, 3.83GB download, needs 8GB RAM
+gpt4all: Nous-Hermes-2-Mistral-7B-DPO - Nous Hermes 2 Mistral DPO, 3.83GB download, needs 8GB RAM
+gpt4all: gpt4all-falcon-newbpe-q4_0 - GPT4All Falcon, 3.92GB download, needs 8GB RAM
 gpt4all: gpt4all-13b-snoozy-q4_0 - Snoozy, 6.86GB download, needs 16GB RAM
 gpt4all: wizardlm-13b-v1 - Wizard v1.2, 6.86GB download, needs 16GB RAM
-gpt4all: starcoder-q4_0 - Starcoder, 8.37GB download, needs 4GB RAM
+gpt4all: orca-2-13b - Orca 2 (Full), 6.86GB download, needs 16GB RAM
+gpt4all: nous-hermes-llama2-13b - Hermes, 6.86GB download, needs 16GB RAM
+gpt4all: starcoder-newbpe-q4_0 - Starcoder, 8.37GB download, needs 4GB RAM
 ```
 Further details on these models can be found [in this Observable notebook](https://observablehq.com/@simonw/gpt4all-models).
 
