@@ -101,7 +101,11 @@ class Gpt4AllModel(llm.Model):
         )
         device: str = Field(
             description="Device to use per the GPT4All constructor documentation, i.e 'cpu', 'gpu', 'amd', 'intel'",
-            default = 'cpu'
+            default="cpu",
+        )
+        window: int = Field(
+            description="Context window size",
+            default=2048,
         )
 
     def __init__(self, details):
@@ -167,7 +171,12 @@ class Gpt4AllModel(llm.Model):
             model_name = self.filename()
             model_exists_locally = Path(GPT4ALL_MODEL_DIRECTORY / model_name).exists()
             allow_download = not model_exists_locally
-            gpt_model = GPT4All(model_name, allow_download=allow_download,device=prompt.options.device)
+            gpt_model = GPT4All(
+                model_name,
+                allow_download=allow_download,
+                device=prompt.options.device,
+                n_ctx=prompt.options.window,
+            )
             output = gpt_model.generate(
                 text_prompt,
                 streaming=True,
